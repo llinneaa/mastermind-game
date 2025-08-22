@@ -10,8 +10,41 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 0) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_22_154855) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
+  create_table "games", force: :cascade do |t|
+    t.string "secret_code"
+    t.integer "attempts_left", default: 10
+    t.string "status", default: "active"
+    t.string "difficulty", default: "easy"
+    t.integer "hints_used", default: 0
+    t.integer "max_hints", default: 3
+    t.bigint "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_games_on_user_id"
+  end
+
+  create_table "guesses", force: :cascade do |t|
+    t.string "guess"
+    t.string "feedback"
+    t.bigint "game_id"
+    t.bigint "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["game_id"], name: "index_guesses_on_game_id"
+    t.index ["user_id"], name: "index_guesses_on_user_id"
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_foreign_key "games", "users"
+  add_foreign_key "guesses", "games"
+  add_foreign_key "guesses", "users"
 end
