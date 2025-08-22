@@ -1,2 +1,0 @@
-class GuessController < ApplicationController
-end
