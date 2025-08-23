@@ -5,6 +5,7 @@
     <ul>
       <li>Games Played: <%= user.games.where.not(status: "pending").count %></li>
       <li>Games Won: <%= user.games.where(status: "completed", won: true).count %></li>
+      <li>Win Rate: <%= user.win_rate %>%</li>
     </ul>
   </div>
 <% else %>
