@@ -1,0 +1,6 @@
+<h2>Mastermind Game</h2>
+<p>Attempts left: <%= @game.attempts_left %></p>
+<p>Status: <%= @game.status %></p>
+
+<%= render 'guess_form', game: @game %>
+<%= render 'guess_history', game: @game %>

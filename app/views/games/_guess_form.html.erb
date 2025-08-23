@@ -1,0 +1,10 @@
+<%# Only show guess form if game is not completed and guesses are less than 10 %>
+<% if game.status != "completed" && game.guesses.count < 10 %>
+  <%= form_with url: guess_game_path(game), method: :post, id: 'guess_form' do |form| %>
+    <%= form.label :guess, 'Enter your guess (4 digits between 0 and 7, e.g. 1234)' %>
+    <%= form.text_field :guess, pattern: '[0-7]{4}', maxlength: 4, minlength: 4, inputmode: 'numeric', autocomplete: 'off', required: true %>
+    <%= form.submit 'Submit Guess' %>
+  <% end %>
+<% else %>
+  <p>No more guesses allowed. The game is over.</p>
+<% end %>

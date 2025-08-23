@@ -1,0 +1,32 @@
+<div id="guess_history">
+  <h3>Guess History</h3>
+  <% if game && game.guesses.any? %>
+    <table>
+      <thead>
+        <tr>
+          <th>Guess</th>
+          <th>Feedback</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% game.guesses.order(created_at: :asc).each do |guess| %>
+          <tr>
+            <td><%= guess.guess %></td>
+            <td><%= guess.feedback %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+    <p>Total Guesses: <%= game.guesses.count %> / 10</p>
+    <% if game.status == "completed" %>
+      <% if game.won? %>
+        <p class="game-result">You guessed the secret code! You win!</p>
+      <% else %>
+        <p class="game-result">You've used all 10 guesses. The computer wins!</p>
+        <p class="secret-reveal">The computer's secret code was: <%= game.secret_code.gsub(/\s*,\s*/, " ") %></p>
+      <% end %>
+    <% end %>
+  <% else %>
+    <p>No guesses yet.</p>
+  <% end %>
+</div>

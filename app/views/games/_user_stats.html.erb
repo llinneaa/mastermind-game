@@ -1,0 +1,12 @@
+<%# Partial to display user stats %>
+<% if user %>
+  <div class="user-stats">
+    <h2>User Stats for <%= user.username %></h2>
+    <ul>
+      <li>Games Played: <%= user.games.where.not(status: "pending").count %></li>
+      <li>Games Won: <%= user.games.where(status: "completed", won: true).count %></li>
+    </ul>
+  </div>
+<% else %>
+  <p>No user stats available.</p>
+<% end %>

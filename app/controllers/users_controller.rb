@@ -15,8 +15,14 @@ class UsersController < ApplicationController
   end
 
   def login
+    if params[:user].nil? || params[:user][:username].blank?
+        flash[:error] = "Username is required."
+        redirect_to login_path and return
+    end
     username = params[:user][:username]
+    Rails.logger.debug "Login attempt for username: '#{username}'"
     found_user = User.find_by(username: username)
+    Rails.logger.debug "Found user: #{found_user.inspect}"
 
     if found_user
       session[:user_id] = found_user.id
@@ -26,7 +32,7 @@ class UsersController < ApplicationController
       session[:user_id] = new_user.id
       flash[:success] = "Successfully created new user #{new_user.username} with ID #{new_user.id}"
     end
-    redirect_to root_path
+    redirect_to dashboard_path
   end
 
   def current

@@ -16,12 +16,54 @@ class GamesController < ApplicationController
       max_hints: 3,
       user_id: params[:user_id]
     )
-    redirect_to game_path(@game)
+    # Check if the game was saved and id was created
+    if @game.persisted?
+        redirect_to dashboard_path
+    else
+        flash[:error] = "Game could not be created."
+        redirect_to root_path
+    end
   end
 
   def guess
-    # Process guess, update attempts, and feedback
-    redirect_to game_path(@game)
+    user_guess = params[:guess]
+
+    unless Game.valid_guess_format?(user_guess)
+      flash[:alert] = "Invalid guess format. Please enter exactly 4 digits between 0 and 7 (e.g. 1234)."
+      respond_to do |format|
+        format.turbo_stream { render turbo_stream: turbo_stream.replace('guess_form', partial: 'games/guess_form', locals: { game: @game }) }
+        format.html { redirect_to game_path(@game) }
+      end
+      return
+    end
+
+    result = @game.process_guess(user_guess, session[:user_id])
+    if result.nil?
+      flash[:alert] = "No more guesses allowed. The game is over."
+      respond_to do |format|
+        format.turbo_stream { render turbo_stream: turbo_stream.replace('guess_form', partial: 'games/guess_form', locals: { game: @game }) }
+        format.html { redirect_to game_path(@game) }
+      end
+      return
+    end
+    guess_record = result[:guess_record]
+    feedback = result[:feedback]
+    status = result[:status]
+    won = result[:won]
+
+    guess_record.update(feedback: feedback)
+
+    if status == "completed"
+      @game.update(status: status, won: won)
+      flash[:success] = won ? "Congratulations! You won!" : "Game over! You've used all attempts."
+    else
+      @game.decrement!(:attempts_left)
+      # ...other feedback logic...
+    end
+    respond_to do |format|
+      format.turbo_stream
+      format.html { redirect_to game_path(@game) }
+    end
   end
 
   def hint
@@ -31,6 +73,11 @@ class GamesController < ApplicationController
 
   def reset
     redirect_to game_path(@game)
+  end
+
+  def dashboard
+    @user = User.find(session[:user_id])
+    @game = @user.games.order(created_at: :desc).first
   end
 
   private

@@ -18,6 +18,7 @@ class User < ApplicationRecord
         games.joins(:guesses).group('games.id').average('guesses.count')
     end
 
+    # Calculate the fewest guesses in a winning game
     def best_game_guesses
         min = games.where(status: 'won').map { |g| g.guesses.count }.min
         min || "No games won yet :("

@@ -1,0 +1,5 @@
+<%= render 'new_game_form' %>
+<% if @game %>
+  <%= render 'game_play', game: @game %>
+<% end %>
+<%= render 'user_stats', user: @user %>
