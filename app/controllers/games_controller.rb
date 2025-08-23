@@ -57,8 +57,7 @@ class GamesController < ApplicationController
       @game.update(status: status, won: won)
       flash[:success] = won ? "Congratulations! You won!" : "Game over! You've used all attempts."
     else
-      @game.decrement!(:attempts_left)
-      # ...other feedback logic...
+      @game.decrement_attempts!
     end
     respond_to do |format|
       format.turbo_stream

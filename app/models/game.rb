@@ -24,6 +24,8 @@ class Game < ApplicationRecord
     won = (user_guess == secret_code)
     status = won || attempts_left <= 1 ? "completed" : "active"
 
+    decrement_attempts! unless won # Only decrement if not a win
+
     { guess_record: guess_record, feedback: feedback, status: status, won: won }
   end
 
