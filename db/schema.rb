@@ -24,6 +24,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_24_024716) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "won", default: false, null: false
+    t.string "game_type", default: "single_player"
+    t.integer "player2_id"
+    t.integer "current_turn_user_id"
     t.index ["user_id"], name: "index_games_on_user_id"
   end
 
@@ -34,7 +37,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_24_024716) do
     t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "player_id"
     t.index ["game_id"], name: "index_guesses_on_game_id"
+    t.index ["player_id"], name: "index_guesses_on_player_id"
     t.index ["user_id"], name: "index_guesses_on_user_id"
   end
 
@@ -47,4 +52,5 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_24_024716) do
   add_foreign_key "games", "users"
   add_foreign_key "guesses", "games"
   add_foreign_key "guesses", "users"
+  add_foreign_key "guesses", "users", column: "player_id"
 end

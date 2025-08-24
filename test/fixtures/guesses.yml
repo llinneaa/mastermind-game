@@ -1,11 +1,50 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-# This model initially had no columns defined. If you add columns to the
-# model remove the "{}" from the fixture names and add the columns immediately
-# below each fixture, per the syntax in the comments below
-#
-one: {}
-# column: value
-#
-two: {}
-# column: value
+# Single Player Game Guesses
+single_first_guess:
+  input_code: "1,1,1,1"
+  user: player_one
+  game: ongoing_single
+
+single_win_guess:
+  input_code: "1,2,3,4"
+  user: player_one
+  game: completed_single_win
+
+# Collaborative Game Guesses - Player 1
+collab_p1_guess:
+  input_code: "1,2,3,4"
+  user: player_one
+  game: completed_collab_p1_win
+
+collab_p1_ongoing:
+  input_code: "1,1,2,2"
+  user: player_one
+  game: ongoing_collab
+
+# Collaborative Game Guesses - Player 2
+collab_p2_guess:
+  input_code: "1,2,3,4"
+  user: player_two
+  game: completed_collab_p2_win
+
+collab_p2_ongoing:
+  input_code: "3,3,4,4"
+  user: player_two
+  game: ongoing_collab
+
+# Difficulty Level Guesses
+easy_game_guess:
+  input_code: "1,2,3,4"  # 4 digits from 0-7
+  user: player_one
+  game: easy_game
+
+medium_game_guess:
+  input_code: "5,8,0,1"  # 4 digits from 0-9
+  user: player_one
+  game: medium_game
+
+hard_game_guess:
+  input_code: "5,8,0,1,9"  # 5 digits from 0-9
+  user: player_one
+  game: hard_game

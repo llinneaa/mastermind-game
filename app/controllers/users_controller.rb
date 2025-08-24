@@ -10,7 +10,7 @@ class UsersController < ApplicationController
     end
   end
 
-  def login_form
+  def new
     @user = User.new
   end
 
@@ -46,6 +46,17 @@ class UsersController < ApplicationController
     session[:user_id] = nil
     flash[:success] = "You have logged out!"
     redirect_to root_path
+  end
+
+  def switch_player
+    next_player = User.find(params[:next_player_id])
+    if next_player
+      session[:user_id] = next_player.id
+      flash[:notice] = "Switched to #{next_player.username}'s turn"
+    else
+      flash[:alert] = "Could not switch players"
+    end
+    redirect_to dashboard_path
   end
 
   def stats

@@ -1,10 +1,30 @@
 <% if @user.games.where(status: "active").none? %>
   <%= form_with url: games_path, method: :post, local: true do |form| %>
-    <%= form.label :difficulty %>
-    <%= form.select :difficulty, ['easy', 'medium', 'hard'] %>
+    <div style="margin-bottom: 10px;">
+      <%= form.label :game_type %>
+      <%= form.select :game_type, [['Single Player', 'single_player'], ['Collaborative', 'collaborative']], {}, { onchange: 'togglePlayer2Select(this.value)' } %>
+    </div>
+
+    <div style="margin-bottom: 10px;">
+      <%= form.label :difficulty %>
+      <%= form.select :difficulty, ['easy', 'medium', 'hard'] %>
+    </div>
+
+    <div id="player2_select" style="margin-bottom: 10px; display: none;">
+      <%= form.label :player2_id, "Select Second Player" %>
+      <%= form.select :player2_id, User.where.not(id: @user.id).map { |u| [u.username, u.id] }, { include_blank: 'Select a player' } %>
+    </div>
+
     <%= form.hidden_field :user_id, value: @user.id %>
     <%= form.submit 'Start New Game' %>
   <% end %>
+
+  <script>
+    function togglePlayer2Select(value) {
+      const player2Select = document.getElementById('player2_select');
+      player2Select.style.display = value === 'collaborative' ? 'block' : 'none';
+    }
+  </script>
 <% else %>
   <p>Please complete your current game before starting a new one.</p>
 <% end %>

@@ -4,6 +4,9 @@
     <table>
       <thead>
         <tr>
+          <% if game.collaborative? %>
+            <th>Player</th>
+          <% end %>
           <th>Guess</th>
           <th>Feedback</th>
         </tr>
@@ -11,6 +14,9 @@
       <tbody>
         <% game.guesses.order(created_at: :asc).each do |guess| %>
           <tr>
+            <% if game.collaborative? %>
+              <td><%= User.find(guess.user_id).username %></td>
+            <% end %>
             <td><%= guess.input_code %></td>
             <td><%= guess.feedback %></td>
           </tr>
@@ -20,9 +26,19 @@
     <p>Total Guesses: <%= game.guesses.count %> / 10</p>
     <% if game.status == "completed" %>
       <% if game.won? %>
-        <p class="game-result">You guessed the secret code! You win!</p>
+        <% if game.collaborative? %>
+          <% winning_guess = game.guesses.order(created_at: :asc).last %>
+          <% winner = User.find(winning_guess.user_id) %>
+          <p class="game-result"><%= winner.username %> cracked the code! Victory!</p>
+        <% else %>
+          <p class="game-result">You cracked the code! Victory!</p>
+        <% end %>
       <% else %>
-        <p class="game-result">You've used all 10 guesses. The computer wins!</p>
+        <% if game.collaborative? %>
+          <p class="game-result">TWO against a ROBOT and you still LOST? 🤖</p>
+        <% else %>
+          <p class="game-result">The computer's defense was too strong! Game Over!</p>
+        <% end %>
         <p class="secret-reveal">The computer's secret code was: <%= game.secret_code.gsub(/\s*,\s*/, " ") %></p>
       <% end %>
     <% end %>

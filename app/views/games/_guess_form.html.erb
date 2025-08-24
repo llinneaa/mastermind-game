@@ -6,6 +6,13 @@
     </p>
   <% end %>
 
+  <% if game.collaborative? %>
+    <div style="margin-bottom: 10px;">
+      <% current_player = User.find(game.current_turn_user_id) %>
+      <p style="font-weight: bold;">Current Turn: <%= current_player.username %></p>
+    </div>
+  <% end %>
+
   <%= form_with url: game_guesses_path(game), method: :post, id: 'guess_form' do |form| %>
     <% digits = game.difficulty == 'hard' ? 5 : 4 %>
     <% max_num = game.difficulty == 'easy' ? 7 : 9 %>

@@ -1,0 +1,39 @@
+<%# Partial to display collaborative stats %>
+<% if game && game.collaborative? %>
+  <% stats = game.user.collaborative_stats_with(game.player2) %>
+  <div class="collaborative-stats" style="background-color: #f5f5f5; padding: 20px; border-radius: 8px; margin-top: 20px;">
+    <h2>Team Stats: <%= game.user.username %> & <%= game.player2.username %></h2>
+    
+    <div style="margin-top: 15px;">
+      <h3>Our Record Against the Computer</h3>
+      <ul style="list-style: none; padding-left: 0;">
+        <li>Games Played Together: <%= stats[:total_games] %></li>
+        <li>Games Won Together: <%= stats[:total_wins] %> 
+            <% if stats[:total_games] > 0 %>
+              (<%= (stats[:total_wins].to_f / stats[:total_games] * 100).round(1) %>% win rate)
+            <% end %>
+        </li>
+      </ul>
+    </div>
+
+    <div style="margin-top: 15px;">
+      <h3>Individual Glory</h3>
+      <ul style="list-style: none; padding-left: 0;">
+        <li>Games Won by <%= game.user.username %>: <%= stats[:player1_wins] %></li>
+        <li>Games Won by <%= game.player2.username %>: <%= stats[:player2_wins] %></li>
+        <li>Games Won by Computer: <%= stats[:computer_wins] %></li>
+      </ul>
+    </div>
+
+    <div style="margin-top: 15px;">
+      <h3>Champion: <%= stats[:champion] %></h3>
+      <% if stats[:champion] == "Computer" %>
+        <p style="font-style: italic; color: #666;">Computer is beating your team! Do better!</p>
+      <% elsif stats[:champion].include?("Tied") %>
+        <p style="font-style: italic; color: #666;">It's neck and neck! Who will take the lead?</p>
+      <% else %>
+        <p style="font-style: italic; color: #666;"><%= stats[:champion] %> is carrying the team!</p>
+      <% end %>
+    </div>
+  </div>
+<% end %>

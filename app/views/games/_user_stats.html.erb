@@ -1,30 +1,38 @@
 <%# Partial to display user stats %>
 <% if user %>
-  <div class="user-stats">
-    <h2>User Stats for <%= user.username %></h2>
+  <div class="user-stats" style="background-color: #f5f5f5; padding: 20px; border-radius: 8px; margin-top: 20px;">
+    <h2>Stats for <%= user.username %></h2>
     
-    <h3>Overall Stats</h3>
-    <ul>
-      <li>Games Completed: <%= user.games.where(status: "completed").count %></li>
-      <li>Games Won: <%= user.games.where(status: "completed", won: true).count %></li>
-      <li>Overall Win Rate: <%= user.win_rate %><%= "%" if user.win_rate.is_a?(Numeric) %></li>
-    </ul>
+    <div style="margin-top: 15px;">
+      <h3>Overall Record</h3>
+      <ul style="list-style: none; padding-left: 0;">
+        <li>Total Games Completed: <%= user.games_completed %></li>
+        <li>Games Won: <%= user.single_player_games.where(status: "completed", won: true).count %>
+          <% if user.win_rate.is_a?(Numeric) %>
+            (<%= user.win_rate %>% win rate)
+          <% end %>
+        </li>
+      </ul>
+    </div>
 
     <% ['easy', 'medium', 'hard'].each do |diff| %>
       <% if user.games.where(difficulty: diff).exists? %>
-        <h3><%= diff.capitalize %> Mode Stats</h3>
-        <ul>
-          <li>Games Completed: <%= user.games.where(difficulty: diff, status: "completed").count %></li>
-          <li>Win Rate: <%= win_rate = user.win_rate(diff) %><%= "%" if win_rate.is_a?(Numeric) %></li>
-          <% avg_guesses = user.average_guesses_for_wins(diff) %>
-          <% if avg_guesses.is_a?(Numeric) %>
-            <li>Average Guesses to Win: <%= avg_guesses %></li>
-            <li>Best Win: <%= user.best_win(diff) %> guesses</li>
-          <% end %>
-        </ul>
+        <div style="margin-top: 15px;">
+          <h3><%= diff.capitalize %> Mode Performance</h3>
+          <ul style="list-style: none; padding-left: 0;">
+            <li>Games Completed: <%= user.single_player_games.where(difficulty: diff, status: "completed").count %></li>
+            <% win_rate = user.win_rate(diff) %>
+            <li>Success Rate: <%= win_rate.is_a?(Numeric) ? "#{win_rate}%" : win_rate %></li>
+            <% avg_guesses = user.average_guesses_for_wins(diff) %>
+            <% if avg_guesses.is_a?(Numeric) %>
+              <li>Average Guesses to Win: <%= avg_guesses %></li>
+              <li style="color: #2E8B57;">Best Victory: <%= user.best_win(diff) %> guesses!</li>
+            <% end %>
+          </ul>
+        </div>
       <% end %>
     <% end %>
   </div>
 <% else %>
-  <p>No user stats available.</p>
+  <p>No stats available.</p>
 <% end %>

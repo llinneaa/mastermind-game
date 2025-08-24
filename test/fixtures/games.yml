@@ -1,11 +1,176 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-# This model initially had no columns defined. If you add columns to the
-# model remove the "{}" from the fixture names and add the columns immediately
-# below each fixture, per the syntax in the comments below
-#
-one: {}
-# column: value
-#
-two: {}
-# column: value
+# Single Player Games - Different states
+ongoing_single:
+  secret_code: "1,2,3,4"
+  game_type: "single_player"
+  status: "ongoing"
+  user: player_one
+
+completed_single_win:
+  secret_code: "1,2,3,4"
+  game_type: "single_player"
+  status: "completed"
+  won: true
+  user: player_one
+
+completed_single_loss:
+  secret_code: "1,2,3,4"
+  game_type: "single_player"
+  status: "completed"
+  won: false
+  user: player_one
+
+# Collaborative Games - Different states and players
+ongoing_collab:
+  secret_code: "1,2,3,4"
+  game_type: "collaborative"
+  status: "ongoing"
+  user: player_one
+  player2: player_two
+
+completed_collab_p1_win:
+  secret_code: "1,2,3,4"
+  game_type: "collaborative"
+  status: "completed"
+  won: true
+  user: player_one
+  player2: player_two
+
+completed_collab_p2_win:
+  secret_code: "1,2,3,4"
+  game_type: "collaborative"
+  status: "completed"
+  won: true
+  user: player_two
+  player2: player_one
+
+completed_collab_loss:
+  secret_code: "1,2,3,4"
+  game_type: "collaborative"
+  status: "completed"
+  won: false
+  user: player_one
+  player2: player_two
+
+# Games with different difficulties
+easy_game:
+  secret_code: "1,2,3,4"  # 4 digits from 0-7
+  game_type: "single_player"
+  status: "completed"
+  difficulty: "easy"
+  user: player_one
+  won: true
+
+medium_game:
+  secret_code: "5,8,0,1"  # 4 digits from 0-9
+  game_type: "single_player"
+  status: "completed"
+  difficulty: "medium"
+  user: player_one
+  won: true
+
+hard_game:
+  secret_code: "5,8,0,1,9"  # 5 digits from 0-9
+  game_type: "single_player"
+  status: "completed"
+  difficulty: "hard"
+  user: player_one
+  won: true
+
+# Game for testing other relationships
+other_player_game:
+  secret_code: "1,2,3,4"
+  game_type: "collaborative"
+  status: "completed"
+  user: player_one
+  player2: other_player
+
+# Games with different difficulties
+easy_game:
+  secret_code: "1,2,3,4"  # 4 digits from 0-7
+  game_type: "single_player"
+  status: "completed"
+  won: true
+  difficulty: "easy"
+  user: player_one
+
+medium_game:
+  secret_code: "5,8,0,1"  # 4 digits from 0-9
+  game_type: "single_player"
+  status: "completed"
+  won: false
+  difficulty: "medium"
+  user: player_one
+
+hard_game:
+  secret_code: "5,8,0,1,9"  # 5 digits from 0-9
+  game_type: "single_player"
+  status: "completed"
+  won: true
+  difficulty: "hard"
+  user: player_one
+
+# Games for testing best win
+best_win_game:
+  secret_code: "1,2,3,4"
+  game_type: "single_player"
+  status: "completed"
+  won: true
+  user: player_one
+
+worst_win_game:
+  secret_code: "1,2,3,4"
+  game_type: "single_player"
+  status: "completed"
+  won: true
+  user: player_one
+
+# Games with different difficulties - one win and one loss for each
+easy_win:
+  secret_code: "1,2,3,4"
+  game_type: "single_player"
+  status: "completed"
+  won: true
+  difficulty: "easy"
+  user: player_one
+
+easy_loss:
+  secret_code: "1,2,3,4"
+  game_type: "single_player"
+  status: "completed"
+  won: false
+  difficulty: "easy"
+  user: player_one
+
+medium_win:
+  secret_code: "1,2,3,4"
+  game_type: "single_player"
+  status: "completed"
+  won: true
+  difficulty: "medium"
+  user: player_one
+
+medium_loss:
+  secret_code: "1,2,3,4"
+  game_type: "single_player"
+  status: "completed"
+  won: false
+  difficulty: "medium"
+  user: player_one
+
+hard_win:
+  secret_code: "1,2,3,4"
+  game_type: "single_player"
+  status: "completed"
+  won: true
+  difficulty: "hard"
+  user: player_one
+
+hard_loss:
+  secret_code: "1,2,3,4"
+  game_type: "single_player"
+  status: "completed"
+  won: false
+  difficulty: "hard"
+  user: player_one

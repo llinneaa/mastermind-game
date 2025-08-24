@@ -5,5 +5,10 @@
   
   <%= render 'guess_form', game: @game %>
   <%= render 'guess_history', game: @game %>
-  <%= render 'user_stats', user: @game.user %>
+  
+  <% if @game.collaborative? %>
+    <%= render 'collaborative_stats', game: @game %>
+  <% else %>
+    <%= render 'user_stats', user: @game.user %>
+  <% end %>
 <% end %>

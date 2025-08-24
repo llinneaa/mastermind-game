@@ -20,5 +20,6 @@ Rails.application.routes.draw do
   post 'login', to: 'users#login'
   delete 'logout', to: 'users#logout'
   get 'current_user', to: 'users#current'
+  post 'switch_player', to: 'users#switch_player'
   resources :users, only: [:index, :show]
 end

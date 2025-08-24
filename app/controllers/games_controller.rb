@@ -20,7 +20,9 @@ class GamesController < ApplicationController
       difficulty: params[:difficulty] || "easy",
       hints_used: 0,
       max_hints: 3,
-      user_id: params[:user_id]
+      user_id: params[:user_id],
+      game_type: params[:game_type] || "single_player",
+      player2_id: params[:player2_id]
     )
     # Check if the game was saved and id was created
     if @game.persisted?
