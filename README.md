@@ -1,6 +1,6 @@
 # Mastermind Game
 
-A modern **web-based implementation** of the classic Mastermind puzzle, built with **Ruby on Rails 8.0**. This application challenges players to crack a secret, computer-generated code within **10 attempts**. After each guess, the game provides feedback on how many digits are correct and how many are in the correct position, helping players apply logic and deduction to find the solution.  
+A **web-based implementation** of the classic Mastermind puzzle, built with **Ruby on Rails 8.0**. This application challenges players to crack a secret, computer-generated code within **10 attempts**. After each guess, the game provides feedback on how many digits are correct and how many are in the correct position, helping players apply logic and deduction to find the solution.  
 
 The game supports both **single-player** and **collaborative** modes, with configurable difficulty levels:  
 
