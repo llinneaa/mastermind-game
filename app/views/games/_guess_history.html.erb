@@ -11,7 +11,7 @@
       <tbody>
         <% game.guesses.order(created_at: :asc).each do |guess| %>
           <tr>
-            <td><%= guess.guess %></td>
+            <td><%= guess.input_code %></td>
             <td><%= guess.feedback %></td>
           </tr>
         <% end %>

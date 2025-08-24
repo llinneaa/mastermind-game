@@ -2,9 +2,9 @@ Rails.application.routes.draw do
 
   root 'users#login_form'
 
-  resources :games, only: [:show, :create] do
+  resources :games do
+    resources :guesses, only: [:create]
     member do
-      post :guess   # Handles guess submissions
       post :hint    # Handles hint requests
       post :reset   # Resets the game for a new session
     end

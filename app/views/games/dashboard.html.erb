@@ -1,5 +1,9 @@
+<h2>Mastermind Game</h2>
 <%= render 'new_game_form' %>
 <% if @game %>
-  <%= render 'game_play', game: @game %>
+  <p>Difficulty: <%= @game.difficulty %></p>
+  
+  <%= render 'guess_form', game: @game %>
+  <%= render 'guess_history', game: @game %>
+  <%= render 'user_stats', user: @game.user %>
 <% end %>
-<%= render 'user_stats', user: @user %>

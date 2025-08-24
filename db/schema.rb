@@ -10,13 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_23_041532) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_24_024716) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
   create_table "games", force: :cascade do |t|
     t.string "secret_code"
-    t.integer "attempts_left", default: 10
     t.string "status", default: "active"
     t.string "difficulty", default: "easy"
     t.integer "hints_used", default: 0
@@ -29,7 +28,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_23_041532) do
   end
 
   create_table "guesses", force: :cascade do |t|
-    t.string "guess"
+    t.string "input_code"
     t.string "feedback"
     t.bigint "game_id"
     t.bigint "user_id"

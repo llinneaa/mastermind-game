@@ -1,15 +1,21 @@
 class GamesController < ApplicationController
-  before_action :set_game, only: [:show, :guess, :hint, :reset]
+  before_action :set_game, only: [:show, :hint, :reset]
 
   def show
     # Renders the main game page
   end
 
   def create
+    # Check if user has any active games
+    if Game.exists?(user_id: params[:user_id], status: "active")
+      flash[:alert] = "Please complete your current game before starting a new one."
+      redirect_to dashboard_path
+      return
+    end
+
     secret_code = fetch_secret_code
     @game = Game.create(
       secret_code: secret_code,
-      attempts_left: 10,
       status: "active",
       difficulty: params[:difficulty] || "easy",
       hints_used: 0,
@@ -25,45 +31,20 @@ class GamesController < ApplicationController
     end
   end
 
-  def guess
-    user_guess = params[:guess]
+  # def guess
+  #   @game = Game.find(params[:id])
+  #   user_guess = params[:guess]
+  #   result = @game.process_guess(user_guess)
+    
+  #   if result[:error]
+  #     flash[:alert] = result[:error]
+  #   elsif result[:message]
+  #     flash[:notice] = result[:message]
+  #   end
+    
+  #   redirect_to dashboard_path  # Redirect back to dashboard instead of game path
+  # end
 
-    unless Game.valid_guess_format?(user_guess)
-      flash[:alert] = "Invalid guess format. Please enter exactly 4 digits between 0 and 7 (e.g. 1234)."
-      respond_to do |format|
-        format.turbo_stream { render turbo_stream: turbo_stream.replace('guess_form', partial: 'games/guess_form', locals: { game: @game }) }
-        format.html { redirect_to game_path(@game) }
-      end
-      return
-    end
-
-    result = @game.process_guess(user_guess, session[:user_id])
-    if result.nil?
-      flash[:alert] = "No more guesses allowed. The game is over."
-      respond_to do |format|
-        format.turbo_stream { render turbo_stream: turbo_stream.replace('guess_form', partial: 'games/guess_form', locals: { game: @game }) }
-        format.html { redirect_to game_path(@game) }
-      end
-      return
-    end
-    guess_record = result[:guess_record]
-    feedback = result[:feedback]
-    status = result[:status]
-    won = result[:won]
-
-    guess_record.update(feedback: feedback)
-
-    if status == "completed"
-      @game.update(status: status, won: won)
-      flash[:success] = won ? "Congratulations! You won!" : "Game over! You've used all attempts."
-    else
-      @game.decrement_attempts!
-    end
-    respond_to do |format|
-      format.turbo_stream
-      format.html { redirect_to game_path(@game) }
-    end
-  end
 
   def hint
     # Provide a hint if available to user
@@ -76,6 +57,7 @@ class GamesController < ApplicationController
 
   def dashboard
     @user = User.find(session[:user_id])
+    # Get the most recent game, regardless of status
     @game = @user.games.order(created_at: :desc).first
   end
 
@@ -88,11 +70,24 @@ class GamesController < ApplicationController
   def fetch_secret_code
     require 'net/http'
     require 'uri'
-    # Fetch a secret code from an external API using parameters listed in instructions
-    uri = URI('https://www.random.org/integers/?num=4&min=0&max=7&col=1&base=10&format=plain&rnd=new')
+
+    # Set parameters based on difficulty
+    case params[:difficulty]
+    when 'hard'
+      num = 5  # 5 digits
+      max = 9  # 0-9
+    when 'medium'
+      num = 4  # 4 digits
+      max = 9  # 0-9
+    else # 'easy'
+      num = 4  # 4 digits
+      max = 7  # 0-7
+    end
+
+    # Fetch secret code from random.org
+    uri = URI("https://www.random.org/integers/?num=#{num}&min=0&max=#{max}&col=1&base=10&format=plain&rnd=new")
     response = Net::HTTP.get(uri)
     # Converts API response to a comma-separated string
-    # String is more flexible than array of integers
     response.split.map(&:to_i).join(",")
   end
 end

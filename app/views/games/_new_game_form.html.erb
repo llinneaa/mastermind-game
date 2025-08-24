@@ -1,6 +1,10 @@
-<%= form_with url: games_path, method: :post, local: true do |form| %>
-  <%= form.label :difficulty %>
-  <%= form.select :difficulty, ['easy', 'medium', 'hard'] %>
-  <%= form.hidden_field :user_id, value: @user.id %>
-  <%= form.submit 'Start New Game' %>
+<% if @user.games.where(status: "active").none? %>
+  <%= form_with url: games_path, method: :post, local: true do |form| %>
+    <%= form.label :difficulty %>
+    <%= form.select :difficulty, ['easy', 'medium', 'hard'] %>
+    <%= form.hidden_field :user_id, value: @user.id %>
+    <%= form.submit 'Start New Game' %>
+  <% end %>
+<% else %>
+  <p>Please complete your current game before starting a new one.</p>
 <% end %>
