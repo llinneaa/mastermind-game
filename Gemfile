@@ -15,7 +15,7 @@ gem "turbo-rails"
 gem "stimulus-rails"
 gem "jbuilder"
 gem "bootsnap", require: false
-gem "faraday", "~> 2.13"
+gem "faraday", "~> 2.14"
 
 # Optional: Active Model password helpers
 # gem "bcrypt", "~> 3.1.7"
